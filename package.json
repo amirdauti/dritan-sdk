@@ -1,0 +1,47 @@
+{
+  "name": "dritan-sdk",
+  "version": "0.1.0",
+  "description": "TypeScript SDK for the Dritan data plane REST API and websocket streams.",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/dritan/dritan"
+  },
+  "homepage": "https://dritan.dev",
+  "bugs": {
+    "url": "https://dritan.dev"
+  },
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "lint": "tsc -p tsconfig.json --noEmit",
+    "prepublishOnly": "npm run build"
+  },
+  "dependencies": {
+    "isomorphic-ws": "^5.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.14.0",
+    "tsup": "^8.0.2",
+    "typescript": "^5.8.2"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
+
