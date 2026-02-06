@@ -29,7 +29,23 @@ jobs:
       - name: Npm version
         run: npm --version
 
-      - name: OIDC debug
+      - name: Configure npm (Trusted Publishing, no tokens)
+        run: |
+          # Force semantic-release/npm to use OIDC, not an injected token.
+          cat > "$RUNNER_TEMP/npmrc" <<'EOF'
+          registry=https://registry.npmjs.org/
+          always-auth=false
+          provenance=true
+          EOF
+
+          echo "NPM_CONFIG_USERCONFIG=$RUNNER_TEMP/npmrc" >> "$GITHUB_ENV"
+          echo "NPM_CONFIG_GLOBALCONFIG=/dev/null" >> "$GITHUB_ENV"
+
+          # If a token is present in repo/org secrets, it will override OIDC.
+          echo "NODE_AUTH_TOKEN=" >> "$GITHUB_ENV"
+          echo "NPM_TOKEN=" >> "$GITHUB_ENV"
+
+      - name: OIDC debug (after config)
         run: |
           echo "ACTIONS_ID_TOKEN_REQUEST_URL=${ACTIONS_ID_TOKEN_REQUEST_URL:+set}"
           echo "ACTIONS_ID_TOKEN_REQUEST_TOKEN=${ACTIONS_ID_TOKEN_REQUEST_TOKEN:+set}"
