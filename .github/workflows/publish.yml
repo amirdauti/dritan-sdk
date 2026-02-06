@@ -47,17 +47,17 @@ jobs:
       - name: Install
         run: |
           # Avoid auth-related env/config that can break npm on GitHub runners.
-          unset NPM_CONFIG_USERCONFIG NODE_AUTH_TOKEN NPM_TOKEN
+          unset NPM_CONFIG_USERCONFIG npm_config_userconfig NODE_AUTH_TOKEN NPM_TOKEN
           npm ci
 
       - name: Lint
         run: |
-          unset NPM_CONFIG_USERCONFIG NODE_AUTH_TOKEN NPM_TOKEN
+          unset NPM_CONFIG_USERCONFIG npm_config_userconfig NODE_AUTH_TOKEN NPM_TOKEN
           npm run lint
 
       - name: Build
         run: |
-          unset NPM_CONFIG_USERCONFIG NODE_AUTH_TOKEN NPM_TOKEN
+          unset NPM_CONFIG_USERCONFIG npm_config_userconfig NODE_AUTH_TOKEN NPM_TOKEN
           npm run build
 
       - name: Publish
@@ -65,5 +65,5 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           # Important: npm OIDC trusted publishing only works when token env vars are NOT set.
-          unset NPM_CONFIG_USERCONFIG NODE_AUTH_TOKEN NPM_TOKEN
+          unset NPM_CONFIG_USERCONFIG npm_config_userconfig NODE_AUTH_TOKEN NPM_TOKEN
           npm run release
