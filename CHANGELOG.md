@@ -1,3 +1,9 @@
+## [0.2.10](https://github.com/amirdauti/dritan-sdk/compare/v0.2.9...v0.2.10) (2026-02-06)
+
+### Bug Fixes
+
+* **ci:** unset npm userconfig env vars ([7e3cb98](https://github.com/amirdauti/dritan-sdk/commit/7e3cb98aa10e265ad924c1dd9a5a89ea08e55054))
+
 ## [0.2.9](https://github.com/amirdauti/dritan-sdk/compare/v0.2.8...v0.2.9) (2026-02-06)
 
 ### Bug Fixes
