@@ -1,3 +1,9 @@
+## [0.2.4](https://github.com/amirdauti/dritan-sdk/compare/v0.2.3...v0.2.4) (2026-02-06)
+
+### Bug Fixes
+
+* **ci:** add OIDC debug + restore setup-node config ([ab22b4b](https://github.com/amirdauti/dritan-sdk/commit/ab22b4b9747be3750499adfea8ebff697ba90680))
+
 ## [0.2.3](https://github.com/amirdauti/dritan-sdk/compare/v0.2.2...v0.2.3) (2026-02-06)
 
 ### Bug Fixes
