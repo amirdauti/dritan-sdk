@@ -18,10 +18,12 @@ jobs:
         with:
           fetch-depth: 0
 
-      - uses: actions/setup-node@v5
+      # Use setup-node v4 for npm OIDC Trusted Publishing compatibility.
+      # setup-node v5 may export placeholder auth tokens that break npm publish.
+      - uses: actions/setup-node@v4
         with:
           node-version: 20.18.0
-          registry-url: https://registry.npmjs.org/
+          registry-url: https://registry.npmjs.org
 
       - name: Update npm
         run: npm install -g npm@11.9.0
@@ -35,8 +37,14 @@ jobs:
           echo "ACTIONS_ID_TOKEN_REQUEST_TOKEN=${ACTIONS_ID_TOKEN_REQUEST_TOKEN:+set}"
           echo "GITHUB_WORKFLOW_REF=$GITHUB_WORKFLOW_REF"
           echo "GITHUB_REF=$GITHUB_REF"
+          echo "NPM_CONFIG_USERCONFIG=${NPM_CONFIG_USERCONFIG:-}"
+          npm config get userconfig || true
           echo "NODE_AUTH_TOKEN=${NODE_AUTH_TOKEN:+set}"
           echo "NPM_TOKEN=${NPM_TOKEN:+set}"
+          if [ -n "${NPM_CONFIG_USERCONFIG:-}" ] && [ -f "$NPM_CONFIG_USERCONFIG" ]; then
+            echo "----- $NPM_CONFIG_USERCONFIG -----"
+            cat "$NPM_CONFIG_USERCONFIG" || true
+          fi
           ls -la "$HOME/.npmrc" || true
 
       - name: Install
