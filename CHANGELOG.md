@@ -1,3 +1,9 @@
+## [0.2.8](https://github.com/amirdauti/dritan-sdk/compare/v0.2.7...v0.2.8) (2026-02-06)
+
+### Bug Fixes
+
+* **ci:** use setup-node v4 for npm trusted publishing ([7fdf543](https://github.com/amirdauti/dritan-sdk/commit/7fdf543255c405b3f669e1170db795aa39ff0019))
+
 ## [0.2.7](https://github.com/amirdauti/dritan-sdk/compare/v0.2.6...v0.2.7) (2026-02-06)
 
 ### Bug Fixes
