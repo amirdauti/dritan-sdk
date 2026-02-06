@@ -1,3 +1,10 @@
+## [0.1.5](https://github.com/amirdauti/dritan-sdk/compare/v0.1.4...v0.1.5) (2026-02-06)
+
+### Bug Fixes
+
+* **ci:** align trusted publisher workflow ([ed84f37](https://github.com/amirdauti/dritan-sdk/commit/ed84f37945a2c03969576498033723c119cedc85))
+* **ci:** set trusted publisher environment ([51ff9c6](https://github.com/amirdauti/dritan-sdk/commit/51ff9c6f640eb5d53bbb6bd381798487c7d13272))
+
 ## [0.1.4](https://github.com/amirdauti/dritan-sdk/compare/v0.1.3...v0.1.4) (2026-02-06)
 
 ### Bug Fixes
