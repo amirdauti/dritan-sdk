@@ -1,3 +1,9 @@
+## [0.2.2](https://github.com/amirdauti/dritan-sdk/compare/v0.2.1...v0.2.2) (2026-02-06)
+
+### Bug Fixes
+
+* **ci:** publish via OIDC without npmrc token ([ef0709b](https://github.com/amirdauti/dritan-sdk/commit/ef0709b03e99c951df646c1f07a2b92c3e041835))
+
 ## [0.2.1](https://github.com/amirdauti/dritan-sdk/compare/v0.2.0...v0.2.1) (2026-02-06)
 
 ### Bug Fixes
