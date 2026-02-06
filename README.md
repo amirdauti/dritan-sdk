@@ -88,10 +88,10 @@ console.log(sent.signature);
 
 ## Websocket streams
 
-Connect to a dex stream (for example `pumpamm`, `pumpfun`, `launchlab`, `dbc`, `dlmm`, `damm2`, `damm1`).
+Connect to a dex stream (for example `pumpamm` (PumpSwap), `pumpfun` (Pump.fun), `launchlab` (Raydium LaunchLab), `amm`, `cpmm`, `clmm`, `dbc` (Meteora DBC), `dlmm`, `damm2`, `damm1`).
 
 ```ts
-const stream = client.streamDex("pumpamm", {
+const stream = client.streamDex("amm", {
   onMessage: (event) => {
     // `event` is parsed JSON when possible, otherwise raw string.
     console.log(event);
