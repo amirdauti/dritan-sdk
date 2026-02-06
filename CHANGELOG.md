@@ -1,3 +1,9 @@
+## [0.2.7](https://github.com/amirdauti/dritan-sdk/compare/v0.2.6...v0.2.7) (2026-02-06)
+
+### Bug Fixes
+
+* **ci:** unset npm token env at publish time ([5182911](https://github.com/amirdauti/dritan-sdk/commit/51829111e850da2f488c094855d2b0e5e082408f))
+
 ## [0.2.6](https://github.com/amirdauti/dritan-sdk/compare/v0.2.5...v0.2.6) (2026-02-06)
 
 ### Bug Fixes
