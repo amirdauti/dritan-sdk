@@ -1,3 +1,9 @@
+## [0.2.3](https://github.com/amirdauti/dritan-sdk/compare/v0.2.2...v0.2.3) (2026-02-06)
+
+### Bug Fixes
+
+* **ci:** use OIDC trusted publishing ([3a8eb3f](https://github.com/amirdauti/dritan-sdk/commit/3a8eb3f469dd4cb06a425f1f7e69dac029d9a3cf))
+
 ## [0.2.2](https://github.com/amirdauti/dritan-sdk/compare/v0.2.1...v0.2.2) (2026-02-06)
 
 ### Bug Fixes
