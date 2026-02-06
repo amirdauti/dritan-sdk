@@ -1,3 +1,9 @@
+## [0.2.5](https://github.com/amirdauti/dritan-sdk/compare/v0.2.4...v0.2.5) (2026-02-06)
+
+### Bug Fixes
+
+* **ci:** force OIDC by unsetting npm token env ([bfb5fee](https://github.com/amirdauti/dritan-sdk/commit/bfb5feea86a3551efad817efdd867670d9eec74b))
+
 ## [0.2.4](https://github.com/amirdauti/dritan-sdk/compare/v0.2.3...v0.2.4) (2026-02-06)
 
 ### Bug Fixes
