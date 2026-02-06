@@ -1,6 +1,6 @@
 {
   "name": "dritan-sdk",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "TypeScript SDK for the Dritan data plane REST API and websocket streams.",
   "license": "MIT",
   "repository": {
