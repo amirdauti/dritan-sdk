@@ -8,7 +8,14 @@ export type DritanClientOptions = {
   WebSocket?: typeof WebSocketImpl;
 };
 
-export type KnownDexStream = "pumpamm" | "pumpfun" | "dlmm" | "damm2" | "damm1" | "dbc";
+export type KnownDexStream =
+  | "pumpamm"
+  | "pumpfun"
+  | "launchlab"
+  | "dlmm"
+  | "damm2"
+  | "damm1"
+  | "dbc";
 
 export type MeteoraThsClientOptions = {
   baseUrl?: string;

@@ -1,11 +1,11 @@
 {
   "name": "dritan-sdk",
-  "version": "0.1.0",
+  "version": "0.1.3",
   "description": "TypeScript SDK for the Dritan data plane REST API and websocket streams.",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/dritan/dritan"
+    "url": "https://github.com/amirdauti/dritan-sdk"
   },
   "homepage": "https://dritan.dev",
   "bugs": {
@@ -33,7 +33,8 @@
     "prepublishOnly": "npm run build"
   },
   "dependencies": {
-    "isomorphic-ws": "^5.0.0"
+    "isomorphic-ws": "^5.0.0",
+    "ws": "^8.19.0"
   },
   "devDependencies": {
     "@types/node": "^22.14.0",
@@ -44,4 +45,3 @@
     "access": "public"
   }
 }
-
