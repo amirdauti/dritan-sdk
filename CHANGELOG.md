@@ -1,3 +1,9 @@
+## [0.2.6](https://github.com/amirdauti/dritan-sdk/compare/v0.2.5...v0.2.6) (2026-02-06)
+
+### Bug Fixes
+
+* **ci:** unset token auth at job level ([28ff4a4](https://github.com/amirdauti/dritan-sdk/commit/28ff4a46e8dd649fef9cc4e9814b9586cae33746))
+
 ## [0.2.5](https://github.com/amirdauti/dritan-sdk/compare/v0.2.4...v0.2.5) (2026-02-06)
 
 ### Bug Fixes
