@@ -8,10 +8,6 @@ jobs:
   release:
     runs-on: ubuntu-latest
     environment: npm-publish
-    env:
-      # Ensure token-based auth cannot override OIDC trusted publishing.
-      NODE_AUTH_TOKEN: ""
-      NPM_TOKEN: ""
     permissions:
       contents: write      # push tags + release commits
       issues: write        # semantic-release/github
@@ -55,4 +51,7 @@ jobs:
       - name: Publish
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: npm run release
+        run: |
+          # Important: npm OIDC trusted publishing only works when token env vars are NOT set.
+          unset NODE_AUTH_TOKEN NPM_TOKEN
+          npm run release
