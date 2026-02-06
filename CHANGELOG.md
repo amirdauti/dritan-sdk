@@ -1,3 +1,9 @@
+## [0.2.9](https://github.com/amirdauti/dritan-sdk/compare/v0.2.8...v0.2.9) (2026-02-06)
+
+### Bug Fixes
+
+* **ci:** sanitize npm auth env ([1bebbe4](https://github.com/amirdauti/dritan-sdk/commit/1bebbe43bae5c8a23a61cc9a8727967f0dad160d))
+
 ## [0.2.8](https://github.com/amirdauti/dritan-sdk/compare/v0.2.7...v0.2.8) (2026-02-06)
 
 ### Bug Fixes
