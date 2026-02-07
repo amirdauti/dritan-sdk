@@ -1,3 +1,9 @@
+## [0.3.3](https://github.com/amirdauti/dritan-sdk/compare/v0.3.2...v0.3.3) (2026-02-07)
+
+### Bug Fixes
+
+* **ci:** match npm trusted publishing settings ([9dfe845](https://github.com/amirdauti/dritan-sdk/commit/9dfe8453243b6ed2021fcf6f3e4754aab9ea93fb))
+
 ## [0.3.2](https://github.com/amirdauti/dritan-sdk/compare/v0.3.1...v0.3.2) (2026-02-07)
 
 ### Bug Fixes
