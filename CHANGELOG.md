@@ -1,3 +1,9 @@
+## [0.3.7](https://github.com/amirdauti/dritan-sdk/compare/v0.3.6...v0.3.7) (2026-02-07)
+
+### Bug Fixes
+
+* **ci:** publish from tags via npm trusted publishing ([032c7ba](https://github.com/amirdauti/dritan-sdk/commit/032c7ba2ee36552fccfb48676fa21e61eb03b08e))
+
 ## [0.3.6](https://github.com/amirdauti/dritan-sdk/compare/v0.3.5...v0.3.6) (2026-02-07)
 
 ### Bug Fixes
