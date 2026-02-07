@@ -1,3 +1,9 @@
+## [0.3.5](https://github.com/amirdauti/dritan-sdk/compare/v0.3.4...v0.3.5) (2026-02-07)
+
+### Bug Fixes
+
+* **ci:** publish to npm using NPM_TOKEN ([d870e37](https://github.com/amirdauti/dritan-sdk/commit/d870e37eb5bcb3553923b0a3b22d2b0723fd5327))
+
 ## [0.3.4](https://github.com/amirdauti/dritan-sdk/compare/v0.3.3...v0.3.4) (2026-02-07)
 
 ### Bug Fixes
