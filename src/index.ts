@@ -11,10 +11,12 @@ export type DritanClientOptions = {
 export type KnownDexStream =
   | "pumpamm"
   | "pumpfun"
+  | "moonit"
   | "launchlab"
   | "amm"
   | "cpmm"
   | "clmm"
+  | "orca"
   | "dlmm"
   | "damm2"
   | "damm1"
