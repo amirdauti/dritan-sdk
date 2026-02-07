@@ -1,3 +1,9 @@
+## [0.3.9](https://github.com/amirdauti/dritan-sdk/compare/v0.3.8...v0.3.9) (2026-02-07)
+
+### Bug Fixes
+
+* **ci:** force OIDC by clearing npm auth config ([f31120d](https://github.com/amirdauti/dritan-sdk/commit/f31120dc595d9d23ad2c2d30ded6784d6691ada2))
+
 ## [0.3.8](https://github.com/amirdauti/dritan-sdk/compare/v0.3.7...v0.3.8) (2026-02-07)
 
 ### Bug Fixes
