@@ -7,6 +7,7 @@ on:
 jobs:
   release:
     runs-on: ubuntu-latest
+    environment: npm-publish
     permissions:
       contents: write      # push tags + release commits
       issues: write        # semantic-release/github
@@ -20,6 +21,7 @@ jobs:
       - uses: actions/setup-node@v5
         with:
           node-version: 20.18.0
+          registry-url: https://registry.npmjs.org
 
       - name: Update npm
         run: npm install -g npm@11.9.0
@@ -44,25 +46,16 @@ jobs:
           ls -la "$HOME/.npmrc" || true
 
       - name: Install
-        run: |
-          # Keep NPM_CONFIG_USERCONFIG from setup-node; only clear token-based auth env vars.
-          unset NODE_AUTH_TOKEN NPM_TOKEN
-          npm ci
+        run: npm ci
 
       - name: Lint
-        run: |
-          unset NODE_AUTH_TOKEN NPM_TOKEN
-          npm run lint
+        run: npm run lint
 
       - name: Build
-        run: |
-          unset NODE_AUTH_TOKEN NPM_TOKEN
-          npm run build
+        run: npm run build
 
       - name: Publish
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          # Important: npm OIDC trusted publishing only works when token env vars are NOT set.
-          unset NODE_AUTH_TOKEN NPM_TOKEN
-          npm run release
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: npm run release
