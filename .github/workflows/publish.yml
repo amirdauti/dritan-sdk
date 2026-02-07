@@ -2,61 +2,33 @@ name: Publish
 
 on:
   push:
-    branches: [ main ]
+    tags:
+      - "v*"
 
 jobs:
-  release:
+  publish:
     runs-on: ubuntu-latest
     environment: npm-publish
     permissions:
-      contents: write      # push tags + release commits
-      issues: write        # semantic-release/github
-      pull-requests: write # semantic-release/github
-      id-token: write      # npm Trusted Publisher (OIDC)
+      contents: read
+      id-token: write # npm Trusted Publisher (OIDC)
     steps:
       - uses: actions/checkout@v5
-        with:
-          fetch-depth: 0
 
       - uses: actions/setup-node@v5
         with:
           node-version: 20.18.0
+          registry-url: https://registry.npmjs.org
 
       - name: Update npm
         run: npm install -g npm@11.9.0
 
-      - name: Npm version
-        run: npm --version
-
-      - name: OIDC debug
-        run: |
-          echo "ACTIONS_ID_TOKEN_REQUEST_URL=${ACTIONS_ID_TOKEN_REQUEST_URL:+set}"
-          echo "ACTIONS_ID_TOKEN_REQUEST_TOKEN=${ACTIONS_ID_TOKEN_REQUEST_TOKEN:+set}"
-          echo "GITHUB_WORKFLOW_REF=$GITHUB_WORKFLOW_REF"
-          echo "GITHUB_REF=$GITHUB_REF"
-          echo "NPM_CONFIG_USERCONFIG=${NPM_CONFIG_USERCONFIG:-}"
-          npm config get userconfig || true
-          echo "NODE_AUTH_TOKEN=${NODE_AUTH_TOKEN:+set}"
-          echo "NPM_TOKEN=${NPM_TOKEN:+set}"
-          if [ -n "${NPM_CONFIG_USERCONFIG:-}" ] && [ -f "$NPM_CONFIG_USERCONFIG" ]; then
-            echo "----- $NPM_CONFIG_USERCONFIG -----"
-            cat "$NPM_CONFIG_USERCONFIG" || true
-          fi
-          ls -la "$HOME/.npmrc" || true
-
       - name: Install
         run: npm ci
 
-      - name: Lint
-        run: npm run lint
-
-      - name: Build
-        run: npm run build
-
-      - name: Publish
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Publish to npm (OIDC)
         run: |
           # Ensure we don't accidentally fall back to token-based auth.
           unset NODE_AUTH_TOKEN NPM_TOKEN
-          npm run release
+          npm publish --access public --provenance
+

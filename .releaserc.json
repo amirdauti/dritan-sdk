@@ -19,8 +19,7 @@
     [
       "@semantic-release/exec",
       {
-        "prepareCmd": "npm version ${nextRelease.version} --no-git-tag-version",
-        "publishCmd": "npm publish --access public --provenance"
+        "prepareCmd": "npm version ${nextRelease.version} --no-git-tag-version"
       }
     ],
     [
