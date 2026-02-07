@@ -73,6 +73,15 @@ export type TokenAggregatedResponse = {
   bondingCurvePercent: number | null;
 };
 
+export type TokenDeployerStatsResponse = {
+  mint: string;
+  deployer: string;
+  total: number;
+  deployed: number;
+  bonded: number;
+  nonBonded: number;
+};
+
 export type DritanStreamOptions = {
   query?: Record<string, string | number | boolean | undefined | null>;
   /**
@@ -298,6 +307,23 @@ export class DritanClient {
       bondingCurvePercent:
         raw?.bondingCurvePercent === undefined ? null : (raw?.bondingCurvePercent ?? null)
     };
+  }
+
+  async getDeployerStats(mint: string): Promise<TokenDeployerStatsResponse> {
+    const url = buildUrl(this.baseUrl, `/token/deployer-stats/${encodeURIComponent(mint)}`);
+    const res = await this.fetchImpl(url, {
+      method: "GET",
+      headers: {
+        "x-api-key": this.apiKey
+      }
+    });
+
+    if (!res.ok) {
+      const text = await res.text().catch(() => "");
+      throw new Error(`Dritan request failed (${res.status}): ${text || res.statusText}`);
+    }
+
+    return (await res.json()) as TokenDeployerStatsResponse;
   }
 
   async buildSwap(body: SwapBuildRequest): Promise<SwapBuildResponse> {

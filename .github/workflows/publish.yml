@@ -7,7 +7,6 @@ on:
 jobs:
   release:
     runs-on: ubuntu-latest
-    environment: npm-publish
     permissions:
       contents: write      # push tags + release commits
       issues: write        # semantic-release/github
@@ -21,6 +20,7 @@ jobs:
       - uses: actions/setup-node@v5
         with:
           node-version: 20.18.0
+          registry-url: https://registry.npmjs.org
 
       - name: Update npm
         run: npm install -g npm@11.9.0

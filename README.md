@@ -59,6 +59,15 @@ const agg = await client.getTokenAggregated("So111111111111111111111111111111111
 console.log(agg.price.priceUsd, agg.metadata?.name, agg.risk?.top10, agg.bondingCurvePercent);
 ```
 
+### Deployer stats
+
+Given a token mint, returns the deployer/creator wallet along with how many tokens they've launched that have completed bonding (often called "graduated").
+
+```ts
+const stats = await client.getDeployerStats("So11111111111111111111111111111111111111112");
+console.log(stats.deployer, stats.bonded, stats.nonBonded);
+```
+
 ## Swap
 
 Dritan can build an unsigned swap transaction (base64) for you to sign, then you broadcast the signed transaction.
