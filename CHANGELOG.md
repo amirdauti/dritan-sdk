@@ -1,3 +1,9 @@
+## [0.3.1](https://github.com/amirdauti/dritan-sdk/compare/v0.3.0...v0.3.1) (2026-02-07)
+
+### Bug Fixes
+
+* **ci:** configure setup-node registry for npm OIDC ([f1c3987](https://github.com/amirdauti/dritan-sdk/commit/f1c3987e1ca6a93e4887a993d03f7eee8961df1c))
+
 ## [0.3.0](https://github.com/amirdauti/dritan-sdk/compare/v0.2.10...v0.3.0) (2026-02-07)
 
 ### Features
