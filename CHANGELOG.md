@@ -1,3 +1,9 @@
+## [0.3.0](https://github.com/amirdauti/dritan-sdk/compare/v0.2.10...v0.3.0) (2026-02-07)
+
+### Features
+
+* add moonit and orca dex streams ([0b0cc8a](https://github.com/amirdauti/dritan-sdk/commit/0b0cc8a7cec53568fc4e6f28393711ab8a7deee4))
+
 ## [0.2.10](https://github.com/amirdauti/dritan-sdk/compare/v0.2.9...v0.2.10) (2026-02-06)
 
 ### Bug Fixes
