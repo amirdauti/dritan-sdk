@@ -1,3 +1,9 @@
+## [0.3.10](https://github.com/amirdauti/dritan-sdk/compare/v0.3.9...v0.3.10) (2026-02-07)
+
+### Bug Fixes
+
+* **ci:** trigger release ([a6afaa2](https://github.com/amirdauti/dritan-sdk/commit/a6afaa2031ffffab38efdc6129f8a93cd8e70c44))
+
 ## [0.3.9](https://github.com/amirdauti/dritan-sdk/compare/v0.3.8...v0.3.9) (2026-02-07)
 
 ### Bug Fixes
