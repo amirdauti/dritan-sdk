@@ -1,3 +1,9 @@
+## [0.3.4](https://github.com/amirdauti/dritan-sdk/compare/v0.3.3...v0.3.4) (2026-02-07)
+
+### Bug Fixes
+
+* **ci:** avoid npm auth config for OIDC publish ([b048d8b](https://github.com/amirdauti/dritan-sdk/commit/b048d8bab3aa757c69fdb5e30a71824c9a6deb07))
+
 ## [0.3.3](https://github.com/amirdauti/dritan-sdk/compare/v0.3.2...v0.3.3) (2026-02-07)
 
 ### Bug Fixes
