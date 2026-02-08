@@ -1,3 +1,9 @@
+## [0.4.0](https://github.com/amirdauti/dritan-sdk/compare/v0.3.10...v0.4.0) (2026-02-08)
+
+### Features
+
+* add token ohlcv endpoint ([12347b8](https://github.com/amirdauti/dritan-sdk/commit/12347b857c6bf48c30a7390fc0e0fd5217720db2))
+
 ## [0.3.10](https://github.com/amirdauti/dritan-sdk/compare/v0.3.9...v0.3.10) (2026-02-07)
 
 ### Bug Fixes
