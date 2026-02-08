@@ -68,6 +68,15 @@ const stats = await client.getDeployerStats("So111111111111111111111111111111111
 console.log(stats.deployer, stats.bonded, stats.nonBonded);
 ```
 
+### OHLCV candles
+
+Fetch OHLCV candles at a given interval. Candles are combined across bonding + graduated pools when possible.
+
+```ts
+const candles = await client.getTokenOhlcv("So11111111111111111111111111111111111111112", "1m");
+console.log(candles.closed.length, candles.active?.close);
+```
+
 ## Swap
 
 Dritan can build an unsigned swap transaction (base64) for you to sign, then you broadcast the signed transaction.

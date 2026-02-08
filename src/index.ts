@@ -82,6 +82,25 @@ export type TokenDeployerStatsResponse = {
   nonBonded: number;
 };
 
+export type OhlcvBar = {
+  time: number;
+  open: number;
+  high: number;
+  low: number;
+  close: number;
+  volume: number;
+};
+
+export type TokenOhlcvResponse = {
+  mint: string;
+  timeframe: string;
+  bucketSizeSec: number;
+  bondingPoolId: string | null;
+  graduatedPoolId: string | null;
+  closed: OhlcvBar[];
+  active: OhlcvBar | null;
+};
+
 export type DritanStreamOptions = {
   query?: Record<string, string | number | boolean | undefined | null>;
   /**
@@ -324,6 +343,35 @@ export class DritanClient {
     }
 
     return (await res.json()) as TokenDeployerStatsResponse;
+  }
+
+  async getTokenOhlcv(
+    mint: string,
+    timeframe: string,
+    opts?: { timeTo?: number }
+  ): Promise<TokenOhlcvResponse> {
+    const search = new URLSearchParams();
+    if (opts?.timeTo != null) search.set("time_to", String(opts.timeTo));
+    const qs = search.toString();
+
+    const url = buildUrl(
+      this.baseUrl,
+      `/token/ohlcv/${encodeURIComponent(mint)}/${encodeURIComponent(timeframe)}${qs ? `?${qs}` : ""}`
+    );
+
+    const res = await this.fetchImpl(url, {
+      method: "GET",
+      headers: {
+        "x-api-key": this.apiKey
+      }
+    });
+
+    if (!res.ok) {
+      const text = await res.text().catch(() => "");
+      throw new Error(`Dritan request failed (${res.status}): ${text || res.statusText}`);
+    }
+
+    return (await res.json()) as TokenOhlcvResponse;
   }
 
   async buildSwap(body: SwapBuildRequest): Promise<SwapBuildResponse> {
