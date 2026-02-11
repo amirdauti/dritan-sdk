@@ -101,6 +101,84 @@ export type TokenOhlcvResponse = {
   active: OhlcvBar | null;
 };
 
+export type WalletPnlTokenStats = Record<string, unknown>;
+
+export type WalletPnlResponse = {
+  tokens?: Record<string, WalletPnlTokenStats>;
+  summary?: Record<string, unknown>;
+  [k: string]: unknown;
+};
+
+export type WalletPortfolioChartResponse = {
+  wallet: string;
+  total: number;
+  totalInvested: number;
+  totalWins: number;
+  totalLosses: number;
+  winPercentage: number;
+  history: Record<string, number>;
+};
+
+export type BasicWalletInformationResponse = {
+  wallet: string;
+  totalSol: number;
+  totalTokenValue: number;
+  totalValue: number;
+  holdings: number;
+  totalHoldingValue: number;
+};
+
+export type WalletTradeToken = {
+  tokenAddress: string;
+  name: string;
+  symbol: string;
+  decimals: number;
+  amount: number;
+  [k: string]: unknown;
+};
+
+export type WalletTrade = {
+  tx: string;
+  wallet: string;
+  from?: WalletTradeToken;
+  to?: WalletTradeToken;
+  program?: string;
+  time?: number;
+  type?: string;
+  [k: string]: unknown;
+};
+
+export type WalletTradesResponse = {
+  trades: WalletTrade[];
+  nextCursor?: string;
+  hasNextPage?: boolean;
+};
+
+export type WalletTokenInfo = {
+  name: string;
+  symbol: string;
+  mint: string;
+  decimals: number;
+  [k: string]: unknown;
+};
+
+export type WalletTokenPosition = {
+  token: WalletTokenInfo;
+  balance: number;
+  value: number;
+  [k: string]: unknown;
+};
+
+export type WalletHoldingsResponse = {
+  wallet: string;
+  totalSol?: number;
+  tokens: WalletTokenPosition[];
+  total?: number;
+  totalTokens?: number;
+  hasNextPage?: boolean;
+  [k: string]: unknown;
+};
+
 export type DritanStreamOptions = {
   query?: Record<string, string | number | boolean | undefined | null>;
   /**
@@ -372,6 +450,154 @@ export class DritanClient {
     }
 
     return (await res.json()) as TokenOhlcvResponse;
+  }
+
+  async getWalletPerformance(
+    wallet: string,
+    opts?: { showHistoricPnL?: boolean; holdingCheck?: boolean; hideDetails?: boolean }
+  ): Promise<WalletPnlResponse> {
+    const url = new URL(buildUrl(this.baseUrl, `/wallet/performance/${encodeURIComponent(wallet)}`));
+    if (opts?.showHistoricPnL != null) {
+      url.searchParams.set("showHistoricPnL", opts.showHistoricPnL ? "true" : "false");
+    }
+    if (opts?.holdingCheck != null) {
+      url.searchParams.set("holdingCheck", opts.holdingCheck ? "true" : "false");
+    }
+    if (opts?.hideDetails != null) {
+      url.searchParams.set("hideDetails", opts.hideDetails ? "true" : "false");
+    }
+
+    const res = await this.fetchImpl(url.toString(), {
+      method: "GET",
+      headers: {
+        "x-api-key": this.apiKey
+      }
+    });
+
+    if (!res.ok) {
+      const text = await res.text().catch(() => "");
+      throw new Error(`Dritan request failed (${res.status}): ${text || res.statusText}`);
+    }
+
+    return (await res.json()) as WalletPnlResponse;
+  }
+
+  async getWalletTokenPerformance(wallet: string, tokenMint: string): Promise<WalletPnlTokenStats> {
+    const url = buildUrl(
+      this.baseUrl,
+      `/wallet/performance/${encodeURIComponent(wallet)}/${encodeURIComponent(tokenMint)}`
+    );
+    const res = await this.fetchImpl(url, {
+      method: "GET",
+      headers: {
+        "x-api-key": this.apiKey
+      }
+    });
+
+    if (!res.ok) {
+      const text = await res.text().catch(() => "");
+      throw new Error(`Dritan request failed (${res.status}): ${text || res.statusText}`);
+    }
+
+    return (await res.json()) as WalletPnlTokenStats;
+  }
+
+  async getWalletPortfolioChart(
+    wallet: string,
+    opts?: { days?: number }
+  ): Promise<WalletPortfolioChartResponse> {
+    const url = new URL(buildUrl(this.baseUrl, `/wallet/portfolio-chart/${encodeURIComponent(wallet)}`));
+    if (opts?.days != null) url.searchParams.set("days", String(opts.days));
+
+    const res = await this.fetchImpl(url.toString(), {
+      method: "GET",
+      headers: {
+        "x-api-key": this.apiKey
+      }
+    });
+
+    if (!res.ok) {
+      const text = await res.text().catch(() => "");
+      throw new Error(`Dritan request failed (${res.status}): ${text || res.statusText}`);
+    }
+
+    return (await res.json()) as WalletPortfolioChartResponse;
+  }
+
+  async getBasicWalletInformation(wallet: string): Promise<BasicWalletInformationResponse> {
+    const url = buildUrl(this.baseUrl, `/wallet/summary/${encodeURIComponent(wallet)}`);
+    const res = await this.fetchImpl(url, {
+      method: "GET",
+      headers: {
+        "x-api-key": this.apiKey
+      }
+    });
+
+    if (!res.ok) {
+      const text = await res.text().catch(() => "");
+      throw new Error(`Dritan request failed (${res.status}): ${text || res.statusText}`);
+    }
+
+    return (await res.json()) as BasicWalletInformationResponse;
+  }
+
+  async getWalletTradeHistory(
+    wallet: string,
+    opts?: { cursor?: string }
+  ): Promise<WalletTradesResponse> {
+    const url = new URL(buildUrl(this.baseUrl, `/wallet/trade-history/${encodeURIComponent(wallet)}`));
+    if (opts?.cursor) url.searchParams.set("cursor", opts.cursor);
+
+    const res = await this.fetchImpl(url.toString(), {
+      method: "GET",
+      headers: {
+        "x-api-key": this.apiKey
+      }
+    });
+
+    if (!res.ok) {
+      const text = await res.text().catch(() => "");
+      throw new Error(`Dritan request failed (${res.status}): ${text || res.statusText}`);
+    }
+
+    return (await res.json()) as WalletTradesResponse;
+  }
+
+  async getWalletHoldings(wallet: string): Promise<WalletHoldingsResponse> {
+    const url = buildUrl(this.baseUrl, `/wallet/holdings/${encodeURIComponent(wallet)}`);
+    const res = await this.fetchImpl(url, {
+      method: "GET",
+      headers: {
+        "x-api-key": this.apiKey
+      }
+    });
+
+    if (!res.ok) {
+      const text = await res.text().catch(() => "");
+      throw new Error(`Dritan request failed (${res.status}): ${text || res.statusText}`);
+    }
+
+    return (await res.json()) as WalletHoldingsResponse;
+  }
+
+  async getWalletHoldingsPage(wallet: string, page: number): Promise<WalletHoldingsResponse> {
+    const url = buildUrl(
+      this.baseUrl,
+      `/wallet/holdings/${encodeURIComponent(wallet)}/page/${encodeURIComponent(String(page))}`
+    );
+    const res = await this.fetchImpl(url, {
+      method: "GET",
+      headers: {
+        "x-api-key": this.apiKey
+      }
+    });
+
+    if (!res.ok) {
+      const text = await res.text().catch(() => "");
+      throw new Error(`Dritan request failed (${res.status}): ${text || res.statusText}`);
+    }
+
+    return (await res.json()) as WalletHoldingsResponse;
   }
 
   async buildSwap(body: SwapBuildRequest): Promise<SwapBuildResponse> {

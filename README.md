@@ -77,6 +77,61 @@ const candles = await client.getTokenOhlcv("So1111111111111111111111111111111111
 console.log(candles.closed.length, candles.active?.close);
 ```
 
+## Wallet Analytics
+
+### Wallet performance (PnL)
+
+```ts
+const pnl = await client.getWalletPerformance("YourWalletPubkeyHere", {
+  // all optional
+  showHistoricPnL: true,
+  holdingCheck: false,
+  hideDetails: false
+});
+console.log(pnl);
+```
+
+### Token-specific performance (PnL)
+
+```ts
+const tokenPnl = await client.getWalletTokenPerformance(
+  "YourWalletPubkeyHere",
+  "So11111111111111111111111111111111111111112"
+);
+console.log(tokenPnl);
+```
+
+### Portfolio chart
+
+```ts
+const chart = await client.getWalletPortfolioChart("YourWalletPubkeyHere", { days: 30 });
+console.log(chart.total, Object.keys(chart.history).length);
+```
+
+### Basic wallet information
+
+```ts
+const info = await client.getBasicWalletInformation("YourWalletPubkeyHere");
+console.log(info.totalSol, info.totalValue, info.holdings);
+```
+
+### Trade history (no `image` field)
+
+```ts
+const trades = await client.getWalletTradeHistory("YourWalletPubkeyHere");
+console.log(trades.trades.length, trades.hasNextPage);
+```
+
+### Holdings (no `image` field)
+
+```ts
+const holdings = await client.getWalletHoldings("YourWalletPubkeyHere");
+console.log(holdings.totalSol, holdings.tokens.length);
+
+const holdingsPage1 = await client.getWalletHoldingsPage("YourWalletPubkeyHere", 1);
+console.log(holdingsPage1.tokens.length);
+```
+
 ## Swap
 
 Dritan can build an unsigned swap transaction (base64) for you to sign, then you broadcast the signed transaction.
