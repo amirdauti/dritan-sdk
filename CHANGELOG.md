@@ -1,3 +1,9 @@
+## [0.5.0](https://github.com/amirdauti/dritan-sdk/compare/v0.4.0...v0.5.0) (2026-02-11)
+
+### Features
+
+* add wallet analytics endpoints ([a7b8792](https://github.com/amirdauti/dritan-sdk/commit/a7b879247ee81cb966c1d7447d58c4f874cb0ade))
+
 ## [0.4.0](https://github.com/amirdauti/dritan-sdk/compare/v0.3.10...v0.4.0) (2026-02-08)
 
 ### Features
