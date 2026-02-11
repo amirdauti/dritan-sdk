@@ -1,3 +1,9 @@
+## [0.6.0](https://github.com/amirdauti/dritan-sdk/compare/v0.5.0...v0.6.0) (2026-02-11)
+
+### Features
+
+* add typed websocket liquidity payload schema ([c0bc1d9](https://github.com/amirdauti/dritan-sdk/commit/c0bc1d9ac07136a059450d34d2c71e7065e8e46e))
+
 ## [0.5.0](https://github.com/amirdauti/dritan-sdk/compare/v0.4.0...v0.5.0) (2026-02-11)
 
 ### Features
