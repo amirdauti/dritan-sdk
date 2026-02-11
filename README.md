@@ -164,10 +164,16 @@ console.log(sent.signature);
 Connect to a dex stream (for example `pumpamm` (PumpSwap), `pumpfun` (Pump.fun), `moonit` (Moonit), `launchlab` (Raydium LaunchLab), `amm`, `cpmm`, `clmm`, `orca` (Orca Whirlpools), `dbc` (Meteora DBC), `dlmm`, `damm2`, `damm1`).
 
 ```ts
-const stream = client.streamDex("amm", {
+import type { DexStreamPoolPayload } from "dritan-sdk";
+
+const stream = client.streamDex<DexStreamPoolPayload>("amm", {
   onMessage: (event) => {
-    // `event` is parsed JSON when possible, otherwise raw string.
-    console.log(event);
+    console.log(
+      event.poolId,
+      event.pricePerCoinUsd,
+      event.liquidity.totalLiquiditySolana,
+      event.liquidity.totalLiquidityUsdc
+    );
   }
 });
 

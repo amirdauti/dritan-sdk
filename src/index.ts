@@ -101,6 +101,45 @@ export type TokenOhlcvResponse = {
   active: OhlcvBar | null;
 };
 
+export type StreamLiquidity = {
+  basePooled: number | null;
+  quotePooled: number | null;
+  totalLiquiditySolana: number | null;
+  totalLiquidityUsdc: number | null;
+};
+
+export type StreamMintPair = {
+  base: string;
+  quote: string;
+};
+
+export type StreamDecimals = {
+  base: number | null;
+  quote: number | null;
+};
+
+export type StreamReserves = {
+  base: number | null;
+  quote: number | null;
+};
+
+export type DexStreamPoolPayload = {
+  poolId: string;
+  mints: StreamMintPair;
+  decimals: StreamDecimals;
+  marketCap: number | null;
+  pricePerCoin: number | null;
+  liquidity: StreamLiquidity;
+  pricePerCoinUsd: number | null;
+  tokenSupply: number | null;
+  reserves: StreamReserves;
+  slot: number;
+  signature?: string;
+  context?: string;
+  curvePercentage?: number | null;
+  complete?: boolean;
+};
+
 export type WalletPnlTokenStats = Record<string, unknown>;
 
 export type WalletPnlResponse = {
@@ -179,7 +218,7 @@ export type WalletHoldingsResponse = {
   [k: string]: unknown;
 };
 
-export type DritanStreamOptions = {
+export type DritanStreamOptions<TMessage = unknown> = {
   query?: Record<string, string | number | boolean | undefined | null>;
   /**
    * When true, includes the api key as `?apiKey=...` in the websocket URL.
@@ -189,7 +228,7 @@ export type DritanStreamOptions = {
   onOpen?: () => void;
   onClose?: (ev: CloseEvent) => void;
   onError?: (ev: Event) => void;
-  onMessage?: (data: unknown) => void;
+  onMessage?: (data: TMessage) => void;
 };
 
 export type DritanStreamHandle = {
@@ -638,9 +677,18 @@ export class DritanClient {
     return (await res.json()) as SwapBroadcastResponse;
   }
 
-  streamDex(dex: KnownDexStream, options?: DritanStreamOptions): DritanStreamHandle;
-  streamDex(dex: string, options?: DritanStreamOptions): DritanStreamHandle;
-  streamDex(dex: string, options: DritanStreamOptions = {}): DritanStreamHandle {
+  streamDex<TMessage = unknown>(
+    dex: KnownDexStream,
+    options?: DritanStreamOptions<TMessage>
+  ): DritanStreamHandle;
+  streamDex<TMessage = unknown>(
+    dex: string,
+    options?: DritanStreamOptions<TMessage>
+  ): DritanStreamHandle;
+  streamDex<TMessage = unknown>(
+    dex: string,
+    options: DritanStreamOptions<TMessage> = {}
+  ): DritanStreamHandle {
     const shouldSendKeyInQuery = options.sendApiKeyInQuery ?? !isNodeRuntime();
     const query = { ...(options.query ?? {}) } as Record<
       string,
@@ -668,7 +716,7 @@ export class DritanClient {
     ws.onmessage = (msg: any) => {
       const raw = messageToString(msg.data);
       const data = raw ? safeJsonParse(raw) : msg.data;
-      options.onMessage?.(data);
+      options.onMessage?.(data as TMessage);
     };
 
     return {
