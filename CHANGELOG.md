@@ -1,3 +1,9 @@
+## [0.8.0](https://github.com/amirdauti/dritan-sdk/compare/v0.7.0...v0.8.0) (2026-02-12)
+
+### Features
+
+* add token search method and ticker-to-candle docs ([4bc6d24](https://github.com/amirdauti/dritan-sdk/commit/4bc6d24a459325f0408c9c6f0eba90c2b6239c80))
+
 ## [0.7.0](https://github.com/amirdauti/dritan-sdk/compare/v0.6.0...v0.7.0) (2026-02-12)
 
 ### Features
