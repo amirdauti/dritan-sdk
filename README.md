@@ -24,6 +24,17 @@ console.log(price);
 
 ## REST
 
+### Token search (ticker -> mint)
+
+Use this when users give symbols like `$WIF` and you need the mint before requesting price/candles.
+
+```ts
+const search = await client.searchTokens("WIF", { limit: 10 });
+const first = search.data?.[0] ?? search.results?.[0] ?? search.tokens?.[0];
+const mint = String(first?.mint ?? first?.tokenAddress ?? "");
+console.log(mint);
+```
+
 ### Token price
 
 ```ts
@@ -75,6 +86,21 @@ Fetch OHLCV candles at a given interval. Candles are combined across bonding + g
 ```ts
 const candles = await client.getTokenOhlcv("So11111111111111111111111111111111111111112", "1m");
 console.log(candles.closed.length, candles.active?.close);
+```
+
+Ticker-first chart flow:
+
+```ts
+const search = await client.searchTokens("WIF", { limit: 1 });
+const mint = String(
+  search.data?.[0]?.mint ??
+    search.data?.[0]?.tokenAddress ??
+    search.results?.[0]?.mint ??
+    search.results?.[0]?.tokenAddress ??
+    ""
+);
+const candles = await client.getTokenOhlcv(mint, "1m");
+console.log(mint, candles.closed.length);
 ```
 
 ## Wallet Analytics
@@ -212,9 +238,32 @@ Example wallet event payload:
     "wallet": "FV1r15rbNKkJanXLheoJA7fXEq6NDuMJ3bukXuhJWyV1",
     "time": 1760272205000,
     "slot": 398134973,
-    "type": "sell",
-    "solDelta": 1.2345,
+    "type": "swap",
+    "solDelta": -0.00001,
     "feeSol": 0.00001,
+    "balances": {
+      "sol": {
+        "pre": 14.221,
+        "post": 14.22099,
+        "delta": -0.00001
+      },
+      "tokens": [
+        {
+          "mint": "2zMMhcVQEXDtdE6vsFS7S7D5oUodfJHE8vd1gnBouauv",
+          "tokenAccount": "8Jf6JxqWDW1JpGbAWf6E6cXJY22gNbEzM7r4rZn3rP8Q",
+          "pre": 33320.37,
+          "post": 0,
+          "delta": -33320.37
+        },
+        {
+          "mint": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
+          "tokenAccount": "5Q544fKrFoe6tsEb4QmQxjvCZXFv6TkxMVTscgt2hN6E",
+          "pre": 0,
+          "post": 751.75,
+          "delta": 751.75
+        }
+      ]
+    },
     "from": {
       "address": "2zMMhcVQEXDtdE6vsFS7S7D5oUodfJHE8vd1gnBouauv",
       "amount": 33320.37,

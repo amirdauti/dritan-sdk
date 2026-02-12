@@ -27,6 +27,30 @@ export type MeteoraThsClientOptions = {
   fetch?: typeof fetch;
 };
 
+export type TokenSearchOptions = {
+  limit?: number;
+  cursor?: string;
+  page?: number;
+};
+
+export type TokenSearchResult = {
+  mint?: string;
+  tokenAddress?: string;
+  symbol?: string;
+  name?: string;
+  [k: string]: unknown;
+};
+
+export type TokenSearchResponse = {
+  query?: string;
+  data?: TokenSearchResult[];
+  tokens?: TokenSearchResult[];
+  results?: TokenSearchResult[];
+  cursor?: string | null;
+  nextCursor?: string | null;
+  [k: string]: unknown;
+};
+
 export type TokenPriceResponse = {
   mint: string;
   dex: string;
@@ -264,6 +288,25 @@ export type WalletStreamVolume = {
   sol?: number;
 };
 
+export type WalletStreamSolBalance = {
+  pre: number;
+  post: number;
+  delta: number;
+};
+
+export type WalletStreamTokenBalance = {
+  mint: string;
+  tokenAccount: string;
+  pre: number;
+  post: number;
+  delta: number;
+};
+
+export type WalletStreamBalances = {
+  sol: WalletStreamSolBalance;
+  tokens: WalletStreamTokenBalance[];
+};
+
 export type WalletStreamData = {
   tx: string;
   wallet: string;
@@ -276,6 +319,7 @@ export type WalletStreamData = {
   to?: WalletStreamSide;
   tokenDeltas: WalletStreamTokenDelta[];
   volume?: WalletStreamVolume;
+  balances: WalletStreamBalances;
 };
 
 export type WalletStreamEnvelope = {
@@ -415,6 +459,43 @@ export class DritanClient {
     this.wsBaseUrl = options.wsBaseUrl ?? "wss://us-east.dritan.dev";
     this.fetchImpl = options.fetch ?? fetch;
     this.WebSocketCtor = options.WebSocket ?? WebSocketImpl;
+  }
+
+  async searchTokens(query: string, opts?: TokenSearchOptions): Promise<TokenSearchResponse> {
+    const trimmedQuery = query.trim();
+    if (!trimmedQuery) {
+      throw new Error("query is required");
+    }
+
+    const url = new URL(buildUrl(this.baseUrl, "/token/search"));
+    url.searchParams.set("query", trimmedQuery);
+
+    if (opts?.limit != null && Number.isFinite(opts.limit)) {
+      const clamped = Math.max(1, Math.min(50, Math.trunc(opts.limit)));
+      url.searchParams.set("limit", String(clamped));
+    }
+
+    const cursor = opts?.cursor?.trim();
+    if (cursor) {
+      url.searchParams.set("cursor", cursor);
+    } else if (opts?.page != null && Number.isFinite(opts.page)) {
+      const page = Math.max(1, Math.trunc(opts.page));
+      url.searchParams.set("page", String(page));
+    }
+
+    const res = await this.fetchImpl(url.toString(), {
+      method: "GET",
+      headers: {
+        "x-api-key": this.apiKey
+      }
+    });
+
+    if (!res.ok) {
+      const text = await res.text().catch(() => "");
+      throw new Error(`Dritan request failed (${res.status}): ${text || res.statusText}`);
+    }
+
+    return (await res.json()) as TokenSearchResponse;
   }
 
   async getTokenPrice(mint: string): Promise<TokenPriceResponse> {
