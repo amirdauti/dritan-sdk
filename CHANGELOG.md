@@ -1,3 +1,9 @@
+## [0.7.0](https://github.com/amirdauti/dritan-sdk/compare/v0.6.0...v0.7.0) (2026-02-12)
+
+### Features
+
+* add wallet websocket streaming client support ([2072036](https://github.com/amirdauti/dritan-sdk/commit/20720362fc353d05559ac63d9581c5103daa2e10))
+
 ## [0.6.0](https://github.com/amirdauti/dritan-sdk/compare/v0.5.0...v0.6.0) (2026-02-11)
 
 ### Features
