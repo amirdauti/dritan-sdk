@@ -180,6 +180,82 @@ const stream = client.streamDex<DexStreamPoolPayload>("amm", {
 setTimeout(() => stream.close(), 10_000);
 ```
 
+### Wallet stream
+
+Wallet monitoring uses `/wallet-stream` and supports runtime subscription methods.
+
+```ts
+import { DritanClient, type WalletStreamEnvelope } from "dritan-sdk";
+
+const client = new DritanClient({ apiKey: "YOUR_KEY" });
+const walletStream = client.streamWallets<WalletStreamEnvelope>({
+  wallets: ["FV1r15rbNKkJanXLheoJA7fXEq6NDuMJ3bukXuhJWyV1"],
+  onMessage: (event) => {
+    if (event.type === "message" && event.data) {
+      console.log(event.data.wallet, event.data.type, event.data.tx);
+    }
+  }
+});
+
+walletStream.subscribeWallets(["7Y...AnotherWallet"]);
+walletStream.unsubscribeWallets(["7Y...AnotherWallet"]);
+walletStream.listSubscriptions();
+```
+
+Example wallet event payload:
+
+```json
+{
+  "type": "message",
+  "data": {
+    "tx": "5K8Hv...",
+    "wallet": "FV1r15rbNKkJanXLheoJA7fXEq6NDuMJ3bukXuhJWyV1",
+    "time": 1760272205000,
+    "slot": 398134973,
+    "type": "sell",
+    "solDelta": 1.2345,
+    "feeSol": 0.00001,
+    "from": {
+      "address": "2zMMhcVQEXDtdE6vsFS7S7D5oUodfJHE8vd1gnBouauv",
+      "amount": 33320.37,
+      "token": {
+        "address": "2zMMhcVQEXDtdE6vsFS7S7D5oUodfJHE8vd1gnBouauv",
+        "amount": -33320.37,
+        "decimals": 6,
+        "raw": "-33320371522"
+      }
+    },
+    "to": {
+      "address": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
+      "amount": 751.75,
+      "token": {
+        "address": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
+        "amount": 751.75,
+        "decimals": 6,
+        "raw": "751752741"
+      }
+    },
+    "tokenDeltas": [
+      {
+        "address": "2zMMhcVQEXDtdE6vsFS7S7D5oUodfJHE8vd1gnBouauv",
+        "amount": -33320.37,
+        "decimals": 6,
+        "raw": "-33320371522"
+      },
+      {
+        "address": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
+        "amount": 751.75,
+        "decimals": 6,
+        "raw": "751752741"
+      }
+    ],
+    "volume": {
+      "usd": 751.75
+    }
+  }
+}
+```
+
 Note: browser websockets cannot send custom headers. If you use this SDK in the browser, pass `sendApiKeyInQuery: true` (this puts your API key in the websocket URL).
 
 ## Configuration

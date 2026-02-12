@@ -236,6 +236,71 @@ export type DritanStreamHandle = {
   close: () => void;
 };
 
+export type WalletStreamMethod =
+  | "subscribeWallets"
+  | "unsubscribeWallets"
+  | "listSubscriptions";
+
+export type WalletStreamCommand = {
+  method: WalletStreamMethod;
+  wallets?: string[];
+};
+
+export type WalletStreamTokenDelta = {
+  address: string;
+  amount: number;
+  decimals: number;
+  raw: string;
+};
+
+export type WalletStreamSide = {
+  address: string;
+  amount: number;
+  token: WalletStreamTokenDelta;
+};
+
+export type WalletStreamVolume = {
+  usd?: number;
+  sol?: number;
+};
+
+export type WalletStreamData = {
+  tx: string;
+  wallet: string;
+  time: number;
+  slot: number;
+  type: string;
+  solDelta: number;
+  feeSol: number;
+  from?: WalletStreamSide;
+  to?: WalletStreamSide;
+  tokenDeltas: WalletStreamTokenDelta[];
+  volume?: WalletStreamVolume;
+};
+
+export type WalletStreamEnvelope = {
+  type: string;
+  data?: WalletStreamData;
+  wallets?: string[];
+  invalidWallets?: string[];
+  subscriptions?: string[];
+  subscriptionCount?: number;
+  limitHit?: boolean;
+  methods?: string[];
+  maxWallets?: number;
+  message?: string;
+};
+
+export type WalletStreamOptions<TMessage = WalletStreamEnvelope> = DritanStreamOptions<TMessage> & {
+  wallets?: string[];
+};
+
+export type WalletStreamHandle = DritanStreamHandle & {
+  subscribeWallets: (wallets: string[]) => void;
+  unsubscribeWallets: (wallets: string[]) => void;
+  listSubscriptions: () => void;
+};
+
 export type SwapBuildRequest = {
   userPublicKey: string;
   inputMint: string;
@@ -722,6 +787,60 @@ export class DritanClient {
     return {
       socket: ws as unknown as WebSocket,
       close: () => ws.close()
+    };
+  }
+
+  streamWallets<TMessage = WalletStreamEnvelope>(
+    options: WalletStreamOptions<TMessage> = {}
+  ): WalletStreamHandle {
+    const initialWallets = (options.wallets ?? [])
+      .map((wallet) => wallet.trim())
+      .filter((wallet) => wallet.length > 0);
+
+    const stream = this.streamDex<TMessage>("wallet-stream", {
+      ...options,
+      onOpen: () => {
+        options.onOpen?.();
+        if (initialWallets.length > 0) {
+          try {
+            (stream.socket as any).send(
+              JSON.stringify({
+                method: "subscribeWallets",
+                wallets: initialWallets
+              } as WalletStreamCommand)
+            );
+          } catch {
+            // no-op
+          }
+        }
+      }
+    });
+
+    const sendWalletCommand = (command: WalletStreamCommand) => {
+      const payload = JSON.stringify(command);
+      try {
+        (stream.socket as any).send(payload);
+      } catch {
+        // no-op
+      }
+    };
+
+    return {
+      ...stream,
+      subscribeWallets: (wallets: string[]) =>
+        sendWalletCommand({
+          method: "subscribeWallets",
+          wallets
+        }),
+      unsubscribeWallets: (wallets: string[]) =>
+        sendWalletCommand({
+          method: "unsubscribeWallets",
+          wallets
+        }),
+      listSubscriptions: () =>
+        sendWalletCommand({
+          method: "listSubscriptions"
+        })
     };
   }
 }
