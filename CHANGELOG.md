@@ -1,3 +1,9 @@
+## [0.9.0](https://github.com/amirdauti/dritan-sdk/compare/v0.8.0...v0.9.0) (2026-02-13)
+
+### Features
+
+* add x402 api key provisioning methods and docs ([f422fc6](https://github.com/amirdauti/dritan-sdk/commit/f422fc6a66526f6ee85ee5cdefbcb1ea9eee207a))
+
 ## [0.8.0](https://github.com/amirdauti/dritan-sdk/compare/v0.7.0...v0.8.0) (2026-02-12)
 
 ### Features
