@@ -3,6 +3,7 @@ import WebSocketImpl from "isomorphic-ws";
 export type DritanClientOptions = {
   apiKey: string;
   baseUrl?: string;
+  controlBaseUrl?: string;
   wsBaseUrl?: string;
   fetch?: typeof fetch;
   WebSocket?: typeof WebSocketImpl;
@@ -49,6 +50,72 @@ export type TokenSearchResponse = {
   cursor?: string | null;
   nextCursor?: string | null;
   [k: string]: unknown;
+};
+
+export type X402PricingResponse = {
+  chain: "solana";
+  rateSolPerMinute: number;
+  rateLamportsPerMinute: number;
+  receiverWallet: string | null;
+  quoteTtlSeconds: number;
+  keyLimits: {
+    maxRps: number;
+    maxConnections: number;
+  };
+  formula: string;
+};
+
+export type X402ApiKeyQuoteRequest = {
+  durationMinutes: number;
+  name?: string;
+  scopes?: string[];
+  payerWallet?: string;
+};
+
+export type X402ApiKeyQuoteResponse = {
+  status: "payment_required";
+  quoteId: string;
+  receiverWallet: string;
+  durationMinutes: number;
+  amountLamports: number;
+  amountSol: number;
+  rateSolPerMinute: number;
+  expiresAt: string;
+  chain: "solana";
+  paymentMethod: "solana_transfer";
+};
+
+export type X402ApiKeyCreateRequest = {
+  quoteId: string;
+  paymentTxSignature: string;
+  payerWallet?: string;
+  name?: string;
+  scopes?: string[];
+};
+
+export type X402ApiKeyCreateResponse = {
+  ok: true;
+  apiKeyId: string;
+  apiKey: string;
+  keyPrefix: string;
+  expiresAt: string;
+  durationMinutes: number;
+  payment: {
+    quoteId: string;
+    txSignature: string;
+    payerWallet: string;
+    receiverWallet: string;
+    amountLamportsCredited: number;
+    amountSolCredited: number;
+  };
+  tenant: {
+    id: string;
+    name: string;
+    limits: {
+      maxRps: number;
+      maxConnections: number;
+    };
+  };
 };
 
 export type TokenPriceResponse = {
@@ -449,6 +516,7 @@ function messageToString(data: unknown): string | null {
 export class DritanClient {
   readonly apiKey: string;
   readonly baseUrl: string;
+  readonly controlBaseUrl: string;
   readonly wsBaseUrl: string;
   private readonly fetchImpl: typeof fetch;
   private readonly WebSocketCtor: typeof WebSocketImpl;
@@ -456,9 +524,80 @@ export class DritanClient {
   constructor(options: DritanClientOptions) {
     this.apiKey = options.apiKey;
     this.baseUrl = options.baseUrl ?? "https://us-east.dritan.dev";
+    this.controlBaseUrl = options.controlBaseUrl ?? "https://api.dritan.dev";
     this.wsBaseUrl = options.wsBaseUrl ?? "wss://us-east.dritan.dev";
     this.fetchImpl = options.fetch ?? fetch;
     this.WebSocketCtor = options.WebSocket ?? WebSocketImpl;
+  }
+
+  async getX402Pricing(): Promise<X402PricingResponse> {
+    const url = buildUrl(this.controlBaseUrl, "/v1/x402/pricing");
+    const res = await this.fetchImpl(url, { method: "GET" });
+    const text = await res.text().catch(() => "");
+    let payload: unknown;
+    try {
+      payload = text ? JSON.parse(text) : {};
+    } catch {
+      payload = { raw: text };
+    }
+
+    if (!res.ok) {
+      throw new Error(`Dritan request failed (${res.status}): ${text || res.statusText}`);
+    }
+
+    return payload as X402PricingResponse;
+  }
+
+  async createX402ApiKeyQuote(
+    input: X402ApiKeyQuoteRequest
+  ): Promise<X402ApiKeyQuoteResponse> {
+    const url = buildUrl(this.controlBaseUrl, "/v1/x402/api-keys/quote");
+    const res = await this.fetchImpl(url, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json"
+      },
+      body: JSON.stringify(input ?? {})
+    });
+    const text = await res.text().catch(() => "");
+    let payload: unknown;
+    try {
+      payload = text ? JSON.parse(text) : {};
+    } catch {
+      payload = { raw: text };
+    }
+
+    if (!res.ok) {
+      throw new Error(`Dritan request failed (${res.status}): ${text || res.statusText}`);
+    }
+
+    return payload as X402ApiKeyQuoteResponse;
+  }
+
+  async createX402ApiKey(
+    input: X402ApiKeyCreateRequest
+  ): Promise<X402ApiKeyCreateResponse> {
+    const url = buildUrl(this.controlBaseUrl, "/v1/x402/api-keys");
+    const res = await this.fetchImpl(url, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json"
+      },
+      body: JSON.stringify(input ?? {})
+    });
+    const text = await res.text().catch(() => "");
+    let payload: unknown;
+    try {
+      payload = text ? JSON.parse(text) : {};
+    } catch {
+      payload = { raw: text };
+    }
+
+    if (!res.ok) {
+      throw new Error(`Dritan request failed (${res.status}): ${text || res.statusText}`);
+    }
+
+    return payload as X402ApiKeyCreateResponse;
   }
 
   async searchTokens(query: string, opts?: TokenSearchOptions): Promise<TokenSearchResponse> {

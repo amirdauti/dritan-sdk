@@ -15,7 +15,8 @@ import { DritanClient } from "dritan-sdk";
 
 const client = new DritanClient({
   apiKey: process.env.DRITAN_API_KEY!,
-  baseUrl: "https://us-east.dritan.dev"
+  baseUrl: "https://us-east.dritan.dev",
+  controlBaseUrl: "https://api.dritan.dev"
 });
 
 const price = await client.getTokenPrice("So11111111111111111111111111111111111111112");
@@ -23,6 +24,33 @@ console.log(price);
 ```
 
 ## REST
+
+### x402 Agent API key flow (time-limited keys)
+
+Use this flow when an agent needs to provision a temporary Dritan key after a Solana payment.
+
+Pricing is fixed at **0.00085 SOL per minute**.
+
+```ts
+const pricing = await client.getX402Pricing();
+console.log(pricing.rateSolPerMinute); // 0.00085
+
+// 1) Create quote (duration -> exact SOL amount + receiver wallet)
+const quote = await client.createX402ApiKeyQuote({
+  durationMinutes: 120,
+  name: "agent-session-2h",
+});
+
+console.log(quote.receiverWallet, quote.amountSol, quote.quoteId);
+
+// 2) User sends SOL to quote.receiverWallet, then submit tx signature
+const created = await client.createX402ApiKey({
+  quoteId: quote.quoteId,
+  paymentTxSignature: "5K8Hv...ConfirmedTransferSignature",
+});
+
+console.log(created.apiKey, created.expiresAt);
+```
 
 ### Token search (ticker -> mint)
 
