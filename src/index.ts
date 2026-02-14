@@ -463,6 +463,19 @@ export type ThsResponse = {
   avgHoldTimePretty: string;
 };
 
+export type ThsTopWalletsEntry = ThsResponse & {
+  rank: number;
+};
+
+export type ThsTopWalletsResponse = {
+  page: number;
+  limit: number;
+  total: number;
+  totalPages: number;
+  hasMore: boolean;
+  data: ThsTopWalletsEntry[];
+};
+
 function buildUrl(baseUrl: string, path: string): string {
   return `${baseUrl.replace(/\/+$/, "")}${path.startsWith("/") ? "" : "/"}${path}`;
 }
@@ -1140,6 +1153,22 @@ export class MeteoraThsClient {
     }
 
     return (await res.json()) as ThsResponse;
+  }
+
+  async getTopWalletsByScore(
+    options: { page?: number; limit?: number } = {}
+  ): Promise<ThsTopWalletsResponse> {
+    const url = new URL(buildUrl(this.baseUrl, "/ths/top-wallets"));
+    if (options.page !== undefined) url.searchParams.set("page", String(options.page));
+    if (options.limit !== undefined) url.searchParams.set("limit", String(options.limit));
+
+    const res = await this.fetchImpl(url.toString(), { method: "GET" });
+    if (!res.ok) {
+      const text = await res.text().catch(() => "");
+      throw new Error(`Meteora THS request failed (${res.status}): ${text || res.statusText}`);
+    }
+
+    return (await res.json()) as ThsTopWalletsResponse;
   }
 }
 

@@ -360,4 +360,9 @@ const tokensOnly = await ths.getThsScoreForTokens("7Y...Wallet", [
   "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v"
 ]);
 console.log(tokensOnly.score);
+
+const topWallets = await ths.getTopWalletsByScore({ page: 1, limit: 25 });
+for (const entry of topWallets.data) {
+  console.log(entry.rank, entry.wallet, entry.score);
+}
 ```
