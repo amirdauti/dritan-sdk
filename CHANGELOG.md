@@ -1,3 +1,9 @@
+## [0.10.0](https://github.com/amirdauti/dritan-sdk/compare/v0.9.0...v0.10.0) (2026-02-14)
+
+### Features
+
+* add THS top-wallets leaderboard method ([11887d3](https://github.com/amirdauti/dritan-sdk/commit/11887d3cf26b95417ba7a4c3112eec8172fc75c8))
+
 ## [0.9.0](https://github.com/amirdauti/dritan-sdk/compare/v0.8.0...v0.9.0) (2026-02-13)
 
 ### Features
